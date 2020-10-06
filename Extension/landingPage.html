@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="styles.css" rel="stylesheet" />
+  <!-- Font Awesome Icon Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+   .checked {
+    color: orange;
+   }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <nav>
+        <div class="center-style"><button class="addNote" id="addNote">+</button></div>
+        <div class="top-menu"><a href="#">Pause</a>
+        <a id="optionBtn" href="#">Option</a></div>
+      </nav>
+    </header>
+
+    <div id="contentToExpand" class="content">
+      <div>
+          <fieldset>
+            <legend>Flash Card</legend>
+            <label for="title">Title:</label>
+            <input type="text" id="title"><br><br>			
+            <label for="content">Content:</label><br>
+            <textarea id="content" rows="5" cols="20" placeholder="Paste content here"></textarea><br>
+            <div class="tag-container">
+              <input id="tag"/>
+          </div>
+            <label for="priority">Priority:</label>
+            <span class="fa fa-star checked" id="1one"></span>
+            <span class="fa fa-star checked" id="2one"></span>
+            <span class="fa fa-star checked" id="3one"></span>
+            <span class="fa fa-star checked" id="4one"></span>
+            <span class="fa fa-star checked" id="5one"></span>
+            <br>
+            <div id=reminder>
+            <label for="reminder">Reminder</label>
+            <input type="checkbox" id="checkBox" onclick="checkBoxClicked()"><br>
+            
+            <label for="time" >Time:</label>
+            <input type="datetime-local" id="time"><br>
+            <label id="lblRules" style="color:red"></label>          
+            <div>
+              <button id="submitBtn">Save</button>
+              <button id="cancelBtn">Cancel</button>
+            </div>
+            <br>
+          </fieldset>
+      </div>
+    </div>
+
+    <!-------------Flash Cards ---------------->
+    <section id="democontainer" class="flashCard flex-container">
+    </section>
+  </main>
+  <script src="landingPage.js"></script>
+  <script src="Models/Flashcard.js"></script>
+  <script src="newFlashCard.js"></script>
+  <script src="Initialize.js"></script>
+</body>
+
+</html>

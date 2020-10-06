@@ -1,0 +1,35 @@
+   <!--if user sleects no , close the UI, and add 1 to the noCount -->
+   <!DOCTYPE html>
+<html>
+
+<head>
+  <link href="styles.css" rel="stylesheet" />
+  <!-- Font Awesome Icon Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+   .checked {
+    color: orange;
+   }
+  </style>
+</head>
+
+<body style="width: 300px; height: 91.45px;">
+  <!------------Card #1 ------------------->
+  <!--Create UI for flashcard popup -----> 
+  <!--Add Yes&No functionality to popup (i.e. yes = delete flashcard; no = keep flashcard, and close popup)--> 
+  <section class="pop-background-color solid-board">
+    <h1 id="title">sample title</h1>
+    <p id="content">blahb blah blah ffefef </p>
+
+    <span>Memorize?</span>
+    <button id="yesBtn" class="yes-button">Yes</button>
+  <button id="noBtn" class="no-button">No</button>
+
+  </section>
+  <script src="Models/Flashcard.js"></script>
+  <script src="landingPage.js"></script>
+  <script src="popup.js"></script>
+  
+</body>
+
+</html>
