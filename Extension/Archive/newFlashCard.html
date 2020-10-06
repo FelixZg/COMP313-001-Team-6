@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+body {height: 400px; width: 200px;}
+#button {margin:auto; width:65%}
+</style>
+</head>
+<body>
+	<div>
+		<form>
+			<fieldset>
+				<legend>Flash Card</legend>
+				<label for="title">Title:</label>
+				<input type="text" id="title"><br><br>			
+				<label for="content">Content:</label><br>
+				<textarea id="content" rows="5" cols="20">Paste content here</textarea>	
+				<div id=reminder>
+				<label for="reminder">Reminder</label>
+				<input type="checkbox" id="checkBox" onclick="myFunction()"><br>
+				
+				<label for="time" >Time:</label>
+				<input type="time" id="time" disabled><br>
+				<label for="date" >Date:</label>
+				<input type="date" id="date" disabled><br><br>	
+				
+				<script>
+					function myFunction() {
+					var checkBox = document.getElementById("checkBox");
+					var time=document.getElementById("time");
+					var date=document.getElementById("date");
+					if(checkBox.checked==true){
+					time.removeAttribute("disabled");
+					date.removeAttribute("disabled");
+					}
+					else{
+					time.disabled=true;
+					date.disabled=true;
+					}
+					}
+				</script>
+				<div id="button">
+					<button type="submit" id="submitBtn">Save</button>
+					<button>Cancel</button>
+				</div>
+				
+			</fieldset>		
+		</form>
+	</div>
+	<script src="Models/Flashcard.js"></script>
+	<script src="newFlashCard.js"></script>
+</body>
+</html>
