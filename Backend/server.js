@@ -7,11 +7,6 @@ const session = require('express-session')
 
 app.use(express.urlencoded( { extended: false }))
 
-app.get('/', (req, res) => {
-  console.log("Got a GET request for the homepage")
-  res.send('Hello GET')
-})
-
 app.post('/signup', [
   body('email').isEmail().withMessage("Invalid email address"),
   body('password').isLength({ min: 6 }).withMessage("The password length must be 6 characters or longer").custom((value, { req, loc, path}) => {
