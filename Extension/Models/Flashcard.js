@@ -13,6 +13,10 @@ class Flashcard {
         window.localStorage.setItem(flashcard.id, JSON.stringify(flashcard));
     }
 
+    static addFlashCardToDb(flashcard){
+      console.log(JSON.stringify(flashcard))
+    }
+
     static deleteFCFromStorage(id){
         window.localStorage.removeItem(id);
     }

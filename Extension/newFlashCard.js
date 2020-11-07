@@ -1,7 +1,7 @@
 function main() {
     createEventListeners();
 }
-function createFlashcard() {
+function createFlashcard(location) {
     //Element getters
     var title = document.getElementById("title");
     var content = document.getElementById("content");
@@ -57,8 +57,13 @@ function createFlashcard() {
     }
 
     //adds new flash card object to storage and assigns random id
-    Flashcard.addFlashCardToStorage(flashcard = new Flashcard('_' + Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
-
+    if (location === "local") {
+      Flashcard.addFlashCardToStorage(flashcard = new Flashcard('_' + Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
+    }
+    
+    if (location === "db") {
+      Flashcard.addFlashCardToDb(flashcard = new Flashcard(title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
+    }
     //gets newly added flash card from storage and parses the flash card
     parsedFlashcard = JSON.parse(window.localStorage.getItem(flashcard.id));
 
@@ -76,11 +81,22 @@ function createFlashcard() {
 // Event listeners for buttons
 function createEventListeners() {
     var submitBtn = document.getElementById("submitBtn");
+    var dbSaveBtn = document.getElementById("dbSaveBtn")
 
     if (submitBtn.addEventListener) {
-        submitBtn.addEventListener("click", createFlashcard, false);
+        submitBtn.addEventListener("click", () => {
+          createFlashcard("local")
+        });
     } else if (submitBtn.attachEvent) {
         submitBtn.attachEvent("onclick", createFlashcard, false);
+    }
+
+    if (dbSaveBtn.addEventListener) {
+      dbSaveBtn.addEventListener("click", () => {
+        createFlashcard("db")
+      });
+    } else if (dbSaveBtn.attachEvent) {
+      dbSaveBtn.attachEvent("onclick", createFlashcard, false);
     }
 
     var cancelBtn = document.getElementById("cancelBtn");

@@ -16,10 +16,15 @@ fourStar.addEventListener("click", function () { starmark(fourStar); });
 var fiveStar = document.getElementById("5one");
 fiveStar.addEventListener("click", function () { starmark(fiveStar); });
 
+let logInSwitch = document.getElementById('logInSwitch');
+let signUpSwitch = document.getElementById('signUpSwitch');
+
 // Add flashcard menu expand & collapse
 button.addEventListener("click", expandCollapseAddFlashcard);
 function expandCollapseAddFlashcard() {
   var content = document.getElementById("contentToExpand");
+  var logInPage = document.getElementById('logIn');
+  var signUpPage = document.getElementById('signUp');
   if (content.style.maxHeight) {
     content.style.maxHeight = null;
     // Reset UI
@@ -31,6 +36,8 @@ function expandCollapseAddFlashcard() {
     document.getElementById("time").value = "";
   } else {
     content.style.maxHeight = content.scrollHeight + "px";
+    logInPage.style.maxHeight = null;
+    signUpPage.style.maxHeight = null;
   }
 }
 
@@ -279,8 +286,29 @@ function deleteTag(tagI) {
     addTags();
 }
 
-optionBtn = document.getElementById("optionBtn");
-optionBtn.addEventListener("click", reloadPage, false);
-function reloadPage() {
-  location.reload();
-}
+logInSwitch.addEventListener("click", function() {
+  var content = document.getElementById('logIn');
+  var otherPage = document.getElementById('signUp');
+  var cards = document.getElementById('contentToExpand');
+  if (content.style.maxHeight) {
+    content.style.maxHeight = null;
+  } else {
+    content.style.maxHeight = content.scrollHeight + "px";
+    otherPage.style.maxHeight = null;
+    cards.style.maxHeight = null;
+  }
+})
+
+signUpSwitch.addEventListener("click", function() {
+  var content = document.getElementById('signUp');
+  var otherPage = document.getElementById('logIn');
+  var cards = document.getElementById('contentToExpand');
+  document.getElementById('contentToExpand');
+  if (content.style.maxHeight) {
+    content.style.maxHeight = null;
+  } else {
+    content.style.maxHeight = content.scrollHeight + "px";
+    otherPage.style.maxHeight = null;
+    cards.style.maxHeight = null;
+  }
+})

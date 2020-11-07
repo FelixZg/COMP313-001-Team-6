@@ -1,9 +1,9 @@
-var localStrategy = require('passport-local').Strategy
+const LocalStrategy = require('passport-local').Strategy
 var { pool } = require('./dbConfig')
 var bcrypt = require('bcrypt')
 
 function initialize(passport) {
-  let authenticateUser = (email, password, done) => {
+  const authenticateUser = (email, password, done) => {
     pool.query(
       `SELECT * FROM users WHERE email = $1`, [email], (err, results) => {
         if (err) {
@@ -18,27 +18,18 @@ function initialize(passport) {
                 if (isMatch) {
                   return done(null, user)
                 } else {
-                  return done(null, false, { message: "Password is incorrect" })
+                  return done(null, false)
                 }
               }
             })
           } else {
-            return done(null, false, { message: "The user is not registered" })
+            return done(null, false)
           }
         }
       }
     )
   }
-  passport.use(
-    new localStrategy(
-      {
-        usernameField: 'email',
-        passwordField: 'password'
-      },
-      authenticateUser
-    )
-  )
-
+  passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser))
   passport.serializeUser((user, done) => done(null, user.id))
   passport.deserializeUser((id, done) => {
     pool.query(

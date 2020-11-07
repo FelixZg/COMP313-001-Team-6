@@ -2,7 +2,7 @@
   "name": "MemorizingChrome",
   "version": "0.1",
   "description": "An extension that will help you remember stuff",
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "http://localhost:3000/"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false

@@ -17,12 +17,32 @@
   <main>
     <header>
       <nav>
+        <a id="logInSwitch">Log in</a>
+        <a id="signUpSwitch">Sign up</a>
+        <div id="logIn" class="content">
+          <form id="logInForm" action="http://127.0.0.1:3000/login" method="POST">
+            <label>Email</label>
+            <input type="text" id="loginEmail" name="email" placeholder="Email" required>
+            <label>Password</label>
+            <input type="password" id="loginPassword" name="password" placeholder="Password" minlength="6"q required>
+            <input type="submit" value="Log in">
+          </form>
+        </div>
+        <div id="signUp" class="content">
+          <form id="signUpForm" action="http://127.0.0.1:3000/signup" method="POST">
+            <label>Email</label>
+            <input type="text" id="email" name="email" placeholder="Email" required>
+            <label>Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" minlength="6" required>
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="6" required>
+            <input type="submit" value="Sign up">
+          </form>
+        </div>
         <div class="center-style"><button class="addNote" id="addNote">+</button></div>
-        <div class="top-menu"><a href="#">Pause</a>
-        <a id="optionBtn" href="#">Option</a></div>
       </nav>
     </header>
-
+  
     <div id="contentToExpand" class="content">
       <div>
           <fieldset>
@@ -49,7 +69,8 @@
             <input type="datetime-local" id="time"><br>
             <label id="lblRules" style="color:red"></label>          
             <div>
-              <button id="submitBtn">Save</button>
+              <button id="submitBtn">Save locally</button>
+              <button id="dbSaveBtn">Save to database</button>
               <button id="cancelBtn">Cancel</button>
             </div>
             <br>

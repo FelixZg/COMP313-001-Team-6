@@ -7,9 +7,9 @@ var bcrypt = require('bcrypt')
 var passport = require('passport')
 
 const PORT = process.env.PORT || 3000
-const INITIALIZE_PASSPORT = require('./passportConfig')
+const initialize = require('./passportConfig')
 
-INITIALIZE_PASSPORT(passport)
+initialize(passport)
 
 app.use(express.urlencoded( { extended: false }))
 app.use(session( {
