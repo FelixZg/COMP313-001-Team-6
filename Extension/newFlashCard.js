@@ -17,15 +17,6 @@ function createFlashcard(location) {
         return;
     }
 
-    //Tests for content that's too long
-    var contentText = content.value;
-    if (contentText.length > 25) {
-        var lblRules = document.getElementById("lblRules");
-        lblRules.style.display = "block";
-        lblRules.innerHTML = "Character limit is 25";
-        return;
-    }
-
     //Date constructor
     var alarm = new Date(dateTimeMs);
     var alarmTime = new Date(alarm.getUTCFullYear(), alarm.getUTCMonth(), alarm.getUTCDate(), alarm.getUTCHours(), alarm.getUTCMinutes(), alarm.getUTCSeconds());
@@ -56,24 +47,20 @@ function createFlashcard(location) {
         organizedTags[t] = tags[t].innerHTML;
     }
 
-    //adds new flash card object to storage and assigns random id
+    //adds new flash card object to storage, assigns random id, and then displays it
     if (location === "local") {
-      Flashcard.addFlashCardToStorage(flashcard = new Flashcard('_' + Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
+      Flashcard.addFlashCardToStorage(flashcard = new Flashcard(Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
+      parsedFlashcard = JSON.parse(window.localStorage.getItem(flashcard.id));
+      //set alarm for flashcard
+      setTimeout(function() { initAlarm(parsedFlashcard.id); }, parsedFlashcard.date - (new Date()).getTime());
+      numFlashcards++;
+      displayFlashcard(flashcard, numFlashcards);
+      arrayOfFCtimes.push(flashcard.date);
     }
     
     if (location === "db") {
-      Flashcard.addFlashCardToDb(flashcard = new Flashcard(title.value, content.value, organizedTags, alarmTime.getTime(), currentStarMark));
+      Flashcard.addFlashCardToDb(flashcard = new Flashcard(Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, null, currentStarMark));
     }
-    //gets newly added flash card from storage and parses the flash card
-    parsedFlashcard = JSON.parse(window.localStorage.getItem(flashcard.id));
-
-    //set alarm for flashcard
-    setTimeout(function() { initAlarm(parsedFlashcard.id); }, parsedFlashcard.date - (new Date()).getTime());
-    
-    numFlashcards++;
-    displayFlashcard(flashcard, numFlashcards);
-
-    arrayOfFCtimes.push(flashcard.date);
 
     expandCollapseAddFlashcard();
 }
@@ -92,11 +79,11 @@ function createEventListeners() {
     }
 
     if (dbSaveBtn.addEventListener) {
-      dbSaveBtn.addEventListener("click", () => {
-        createFlashcard("db")
-      });
+        dbSaveBtn.addEventListener("click", () => {
+          createFlashcard("db")
+        });
     } else if (dbSaveBtn.attachEvent) {
-      dbSaveBtn.attachEvent("onclick", createFlashcard, false);
+        dbSaveBtn.attachEvent("onclick", createFlashcard, false);
     }
 
     var cancelBtn = document.getElementById("cancelBtn");

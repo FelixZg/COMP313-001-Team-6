@@ -12,6 +12,7 @@ const initialize = require('./passportConfig')
 initialize(passport)
 
 app.use(express.urlencoded( { extended: false }))
+app.use(express.json())
 app.use(session( {
   secret: 'secret', resave: false, saveUninitialized: false
 }))
@@ -73,5 +74,48 @@ app.post('/login', passport.authenticate('local', (error, user, info) => {
     console.log(info)
   }
 }))
+
+app.get('/cards', (req, res) => {
+  pool.query(
+    `SELECT * FROM cards`, (err, results) => {
+      if (err) {
+        throw err
+      } else if (results.rows.length > 0) {
+        res.send(results.rows)
+      } else {
+        res.status(200).json({ response: "empty database" })
+      }
+    }
+  )
+  
+})
+
+app.post('/cards', (req, res) => {
+  let id = req.body.id
+  let title = req.body.title
+  let content = req.body.content
+  let tags = req.body.tag
+  let alarmTime = req.body.date
+  let star = req.body.priority
+  let noCount = req.body.noCount
+  pool.query(
+    `INSERT INTO cards (id, title, content, tags, alarmTime, star, noCount)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING id, title, content, tags, alarmtime, star, nocount`, [id, title, content, tags, alarmTime, star, noCount],
+    (err) => {
+      if (err) {
+        res.status(400).json({ test: "bad req yo"})
+        throw err       
+      } else {
+        console.log("success")
+        res.status(200).json({ response: "Card successfully uploaded to the database"})
+      }
+    }
+  )
+})
+
+app.delete('/cards', (req, res) => {
+
+})
 
 app.listen(3000, () => console.log(`App listening on port ${PORT}!`))

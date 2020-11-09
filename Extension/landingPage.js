@@ -16,8 +16,9 @@ fourStar.addEventListener("click", function () { starmark(fourStar); });
 var fiveStar = document.getElementById("5one");
 fiveStar.addEventListener("click", function () { starmark(fiveStar); });
 
-let logInSwitch = document.getElementById('logInSwitch');
-let signUpSwitch = document.getElementById('signUpSwitch');
+let logInSwitch = document.getElementById('logInSwitch')
+let signUpSwitch = document.getElementById('signUpSwitch')
+let loadFromDbBtn = document.getElementById('loadFromDbBtn')
 
 // Add flashcard menu expand & collapse
 button.addEventListener("click", expandCollapseAddFlashcard);
@@ -79,7 +80,7 @@ function displayFlashcard(flashcardData, i) {
 
   //create paragraph element
   p = document.createElement("P");
-
+  
   //create button elements
   updatebutton = document.createElement("BUTTON");
   deletebutton = document.createElement("BUTTON");
@@ -114,7 +115,8 @@ function displayFlashcard(flashcardData, i) {
   document.getElementById("democontainer").appendChild(container);
   document.getElementById(i).appendChild(title);
   document.getElementById(i).appendChild(p);
-  for (var t=0; t<flashcardData.tag.length; t++) {
+  //console.log(flashcardData)
+  for (var t=0; t<flashcardData.tag.length; t++) {   
       var newTag = createTag(flashcardData.tag[t]);
       newTag.setAttribute("style", "float:left;");
       document.getElementById(i).appendChild(newTag);
@@ -131,6 +133,41 @@ function displayFlashcard(flashcardData, i) {
   deleteNoBtn.addEventListener("click", expandCollapseDeleteFlashcard.bind(this, i), false);
   document.getElementById(updatebutton.id).addEventListener("click", updateFC.bind(this, flashcardData.id), true);
 
+  checkForNoFlashcards();
+}
+
+function displayFlashcardFromDb(flashcardData, i) {
+  //create section element
+  var id = parseInt(flashcardData.id)
+  console.log(i)
+  container = document.createElement("SECTION");
+  container.setAttribute('class', 'flashCardItem flex-item');
+  container.setAttribute('Id', i);
+
+  //create header element
+  title = document.createElement("H4");
+
+  //create paragraph element
+  p = document.createElement("P");
+  
+  //create button elements
+  updatebutton = document.createElement("BUTTON");
+  deletebutton = document.createElement("BUTTON");
+
+  //assign inner html values
+  title.innerHTML = flashcardData.title;
+  p.innerHTML = flashcardData.content;
+  updatebutton.innerHTML = "Edit";
+  deletebutton.innerHTML = "Delete";
+
+  //append child elements
+  document.getElementById("democontainer").appendChild(container);
+  document.getElementById(i).appendChild(title);
+  document.getElementById(i).appendChild(p);
+  //console.log(flashcardData)
+  document.getElementById(i).appendChild(document.createElement("br"));
+  document.getElementById(i).appendChild(document.createElement("br"));
+  
   checkForNoFlashcards();
 }
 
@@ -286,7 +323,7 @@ function deleteTag(tagI) {
     addTags();
 }
 
-logInSwitch.addEventListener("click", function() {
+logInSwitch.addEventListener("click", () => {
   var content = document.getElementById('logIn');
   var otherPage = document.getElementById('signUp');
   var cards = document.getElementById('contentToExpand');
@@ -299,7 +336,7 @@ logInSwitch.addEventListener("click", function() {
   }
 })
 
-signUpSwitch.addEventListener("click", function() {
+signUpSwitch.addEventListener("click", () => {
   var content = document.getElementById('signUp');
   var otherPage = document.getElementById('logIn');
   var cards = document.getElementById('contentToExpand');
@@ -311,4 +348,20 @@ signUpSwitch.addEventListener("click", function() {
     otherPage.style.maxHeight = null;
     cards.style.maxHeight = null;
   }
+})
+
+loadFromDbBtn.addEventListener('click', () => {
+  var url = 'http://localhost:3000/cards'
+
+  fetch(url)
+  .then(response => response.json())
+  .then(function(json) {
+    for (var i = 0; i < json.length; i++) {
+      var card = json[i];
+      console.log(card)      
+      displayFlashcardFromDb(card, i + 10);
+      numFlashcards++;
+    }
+  })
+  .catch(err => console.log(err))
 })

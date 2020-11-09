@@ -18,12 +18,12 @@ function initialize(passport) {
                 if (isMatch) {
                   return done(null, user)
                 } else {
-                  return done(null, false)
+                  return done(null, false, { message: "The given password is incorrect" })
                 }
               }
             })
           } else {
-            return done(null, false)
+            return done(null, false, { message: "No user account was found for the given email address" })
           }
         }
       }
