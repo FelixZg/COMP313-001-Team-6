@@ -1,0 +1,33 @@
+﻿@model UserSignup.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="login-form">
+                <h1>Sign Up</h1>
+                <form asp-action="Create">
+                    <input asp-for="Username" placeholder="Username">
+                    <input asp-for="Password" placeholder="password">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </form>
+                <div style="height: 0.5px; background-color: #ccc; margin-top: 20px; margin-bottom: 20px"></div>
+                <a href="#" style="text-transform: lowercase; color: #0072ff; font-size: 15px; margin-top: 10px;">Forget Password</a>
+
+
+            </div>
+        </div>
+    </section>
+   
+</body>
+</html>
