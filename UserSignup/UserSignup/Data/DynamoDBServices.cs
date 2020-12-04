@@ -33,5 +33,21 @@ namespace UserSignup.Data
             User newUser = await context.LoadAsync<User>(username, default(System.Threading.CancellationToken));
             return newUser;
         }
+
+        public async Task<Card> getCard(string id)
+        {
+            DynamoDBContext context = new DynamoDBContext(dynamoDBClient);
+            Card card = await context.LoadAsync<Card>(id, default(System.Threading.CancellationToken));
+            return card;
+        }
+
+        public async Task<Card> InsertCard(Card card)
+        {
+            DynamoDBContext context = new DynamoDBContext(dynamoDBClient);
+            card.Id = System.Guid.NewGuid().ToString();
+            await context.SaveAsync<Card>(card, default(System.Threading.CancellationToken));
+            Card newCard = await context.LoadAsync<Card>(card.Id, default(System.Threading.CancellationToken));
+            return newCard;
+        }
     }
 }

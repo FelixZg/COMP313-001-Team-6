@@ -43,7 +43,27 @@ namespace UserSignup.Controllers
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
             User user = await service.GetUserAsync(username);
-            return Ok(user);
+            UserDTO userDTO = new UserDTO();
+            userDTO.Username = user.Username;
+            userDTO.Password = user.Password;
+            foreach (string id in user.Cards)
+            {
+                userDTO.Cards.Add(await service.getCard(id));
+            }
+            return Ok(userDTO);
+        }
+
+        [HttpPost("api/{username}/card")]
+        public async Task<ActionResult> InsertCard(string username, [FromBody] Card card)
+        {
+            DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+            Card newCard = await service.InsertCard(card);
+            User user = await service.GetUserAsync(username);
+            List<string> newList = user.Cards;
+            newList.Add(newCard.Id);
+            user.Cards = newList;
+            await service.InsertUser(user);
+            return Ok(newCard);
         }
 
       
