@@ -45,12 +45,6 @@ namespace UserSignup
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddDefaultAWSOptions(new AWSOptions
-            {
-                Credentials = new Amazon.Runtime.BasicAWSCredentials("AKIA6GP6MH63OUQHWNO2", "9JxFoOf8OMJDJYJEh5pW6nG+6JwWS+gZwXcDx9UK"),
-                Region = Amazon.RegionEndpoint.USWest2
-            });
-
             services.AddAWSService<IAmazonDynamoDB>();
         }
 
