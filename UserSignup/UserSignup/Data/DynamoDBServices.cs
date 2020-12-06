@@ -49,5 +49,19 @@ namespace UserSignup.Data
             Card newCard = await context.LoadAsync<Card>(card.Id, default(System.Threading.CancellationToken));
             return newCard;
         }
+
+        public async Task<Card> UpdateCard(Card card)
+        {
+            DynamoDBContext context = new DynamoDBContext(dynamoDBClient);
+            await context.SaveAsync(card, default(System.Threading.CancellationToken));
+            Card newCard = await context.LoadAsync<Card>(card.Id, default(System.Threading.CancellationToken));
+            return newCard;
+        }
+
+        public async void DeleteCard(string id)
+        {
+            DynamoDBContext context = new DynamoDBContext(dynamoDBClient);
+            await context.DeleteAsync<Card>(id, default(System.Threading.CancellationToken));
+        }
     }
 }

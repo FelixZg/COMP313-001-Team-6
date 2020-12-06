@@ -8,7 +8,7 @@
     "environment"    : "UserSignup-test",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-5ed6a673\";\"aws:ec2:vpc,Subnets\"=\"subnet-3790687d\"",
+    "additional-options"   : "",
     "solution-stack"       : "64bit Amazon Linux 2 v2.1.0 running .NET Core",
     "environment-type"     : "SingleInstance",
     "cname"                : "usersignup-test",
