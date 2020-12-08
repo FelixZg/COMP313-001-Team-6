@@ -137,12 +137,11 @@ function displayFlashcard(flashcardData, i) {
 }
 
 function displayFlashcardFromDb(flashcardData, i) {
-  //create section element
   var id = parseInt(flashcardData.id)
-  console.log(i)
+  console.log(id)
   container = document.createElement("SECTION");
   container.setAttribute('class', 'flashCardItem flex-item');
-  container.setAttribute('Id', i);
+  container.setAttribute('Id', id);
 
   //create header element
   title = document.createElement("H4");
@@ -162,11 +161,10 @@ function displayFlashcardFromDb(flashcardData, i) {
 
   //append child elements
   document.getElementById("democontainer").appendChild(container);
-  document.getElementById(i).appendChild(title);
-  document.getElementById(i).appendChild(p);
-  //console.log(flashcardData)
-  document.getElementById(i).appendChild(document.createElement("br"));
-  document.getElementById(i).appendChild(document.createElement("br"));
+  document.getElementById(id).appendChild(title);
+  document.getElementById(id).appendChild(p);
+  document.getElementById(id).appendChild(document.createElement("br"));
+  document.getElementById(id).appendChild(document.createElement("br"));
   
   checkForNoFlashcards();
 }

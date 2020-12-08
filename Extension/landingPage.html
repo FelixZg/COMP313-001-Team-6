@@ -20,24 +20,27 @@
         <a id="logInSwitch">Log in</a>
         <a id="signUpSwitch">Sign up</a>
         <div id="logIn" class="content">
-          <form id="logInForm" action="http://127.0.0.1:3000/login" method="POST">
-            <label>Email</label>
-            <input type="text" id="loginEmail" name="email" placeholder="Email" required>
+          <form id="logInForm">
+            <label>Username</label>
+            <input type="text" id="logInUsername" name="username" placeholder="username" required>
             <label>Password</label>
-            <input type="password" id="loginPassword" name="password" placeholder="Password" minlength="6"q required>
-            <input type="submit" value="Log in">
+            <input type="password" id="logInPassword" name="password" placeholder="Password" minlength="5" required>
+            <input type="submit" id="logInSubmitBtn" value="Log in">
           </form>
         </div>
         <div id="signUp" class="content">
-          <form id="signUpForm" action="http://127.0.0.1:3000/signup" method="POST">
-            <label>Email</label>
-            <input type="text" id="email" name="email" placeholder="Email" required>
+          <form id="signUpForm">
+            <label>Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
             <label>Password</label>
-            <input type="password" id="password" name="password" placeholder="Password" minlength="6" required>
+            <input type="password" id="password" name="password" placeholder="Password" minlength="5" required>
             <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="6" required>
-            <input type="submit" value="Sign up">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="5" required>
+            <input type="submit" id="signUpSubmitBtn" value="Sign up">
           </form>
+        </div>
+        <divclass="center-style">
+          <p id="username"></a>
         </div>
         <div class="center-style">
           <button class="addNote" id="addNote">+</button>
@@ -91,6 +94,8 @@
   <script src="Models/Flashcard.js"></script>
   <script src="newFlashCard.js"></script>
   <script src="Initialize.js"></script>
+  <script src="login.js"></script>
+  <Script src="register.js"></script>
 </body>
 
 </html>

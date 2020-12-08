@@ -11,6 +11,8 @@ using UserSignup.Models;
 
 namespace UserSignup.Controllers
 {
+    [Route("api/")]
+    [ApiController]
     public class HomeController : Controller
     {
         private IAmazonDynamoDB dynamoDBClient;
@@ -24,13 +26,49 @@ namespace UserSignup.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind("Username, Password")] User user)
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+                User userExists = await service.GetUserAsync(user.Username);
+                if (userExists == null)
+                {
+                    return NotFound("The user does not exist");
+                }
+                else
+                {
+                    if (BCrypt.Net.BCrypt.Verify(user.Password, userExists.Password))
+                    {
+                        return Ok("Logged in");
+                    }
+                    else
+                    {
+                        return BadRequest("The password entered was not correct");
+                    }
+                }
+            } 
+            else
+            {
+                return BadRequest(ModelState);
+            }          
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult> Register([FromBody] User user)
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
-            User newUser = await service.InsertUser(user);
-            return RedirectToAction("Confirm");
+            User userExists = await service.GetUserAsync(user.Username);
+            if  (userExists != null)
+            {
+                return BadRequest("A user with this username already exists");
+            } 
+            else
+            {
+                await service.InsertUser(user);
+                return Ok();
+            } 
         }
 
         public ViewResult Confirm()
@@ -38,34 +76,75 @@ namespace UserSignup.Controllers
             return View();
         }
 
-        [HttpGet("api/{username}")]
-        public async Task<ActionResult> getUser(string username)
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult> GetUser(string username)
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
             User user = await service.GetUserAsync(username);
-            UserDTO userDTO = new UserDTO();
-            userDTO.Username = user.Username;
-            userDTO.Password = user.Password;
-            foreach (string id in user.Cards)
-            {
-                userDTO.Cards.Add(await service.getCard(id));
-            }
-            return Ok(userDTO);
+            return Ok(user);
         }
 
-        [HttpPost("api/{username}/card")]
+        [HttpGet("{username}/card")]
+        public async Task<ActionResult> GetCards(string username)
+        {
+            DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+            User user = await service.GetUserAsync(username);
+            var cardList = new List<Card>();
+            foreach (string id in user.Cards)
+            {
+                cardList.Add(await service.getCard(id));
+            }
+
+            return Ok(cardList.Where(card => card != null));
+        }
+
+        [HttpGet("card/{id}")]
+        public async Task<ActionResult> GetCard(string id)
+        {
+            DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+            Card card = await service.getCard(id);
+            return Ok(card);
+        }
+
+        [HttpPut("card/edit/{id}")]
+        public async Task<ActionResult> EditCard([FromBody] Card card)
+        {
+            DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+            Card newCard = await service.UpdateCard(card);
+            return Ok(newCard);
+        }
+
+        [HttpPost("{username}/card")]
         public async Task<ActionResult> InsertCard(string username, [FromBody] Card card)
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
             Card newCard = await service.InsertCard(card);
             User user = await service.GetUserAsync(username);
-            List<string> newList = user.Cards;
-            newList.Add(newCard.Id);
-            user.Cards = newList;
-            await service.InsertUser(user);
-            return Ok(newCard);
+            if (user.Cards != null)
+            {
+                List<string> cardList = user.Cards;
+                cardList.Add(newCard.Id);
+                user.Cards = cardList;
+                await service.UpdateUser(user);
+                return Ok(newCard);
+            }
+            else
+            {
+                List<string> newList = new List<string>();
+                newList.Add(newCard.Id);
+                user.Cards = newList;
+                await service.UpdateUser(user);
+                return Ok(newCard);
+            }
         }
 
-      
+
+        [HttpDelete("card/delete/{id}")]
+        public void DeleteCard(string id)
+        {
+            DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
+            service.DeleteCard(id);
+        }
     }
 }

@@ -25,6 +25,8 @@ namespace UserSignup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -43,12 +45,6 @@ namespace UserSignup
                 options.Cookie.HttpOnly = true;
                 // Make the session cookie essential
                 options.Cookie.IsEssential = true;
-            });
-
-            services.AddDefaultAWSOptions(new AWSOptions
-            {
-                Credentials = new Amazon.Runtime.BasicAWSCredentials("AKIA6GP6MH63OUQHWNO2", "9JxFoOf8OMJDJYJEh5pW6nG+6JwWS+gZwXcDx9UK"),
-                Region = Amazon.RegionEndpoint.USWest2
             });
 
             services.AddAWSService<IAmazonDynamoDB>();

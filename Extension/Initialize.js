@@ -34,7 +34,7 @@ if (window.addEventListener) {
 }
 
 // Detect highlighted text and make a flashcard out of it
-chrome.tabs.executeScript( {
+/* chrome.tabs.executeScript( {
     code: "window.getSelection().toString();"
 }, function(selection) {
     if (selection != null && selection != "") {
@@ -47,4 +47,4 @@ chrome.tabs.executeScript( {
         latestSelectionGrab = selection;
     }
     chrome.tabs.executeScript({code: "window.getSelection().removeAllRanges();"});
-});
+}); */

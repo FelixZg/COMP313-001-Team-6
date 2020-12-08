@@ -14,7 +14,11 @@ class Flashcard {
     }
 
     static addFlashCardToDb(flashcard){
-      var url = 'http://localhost:3000/cards'
+      var username
+      chrome.storage.local.get("username", function(item) {
+        username = item.username
+      })
+      var url = 'http://localhost:53741/api/' + username
 
       fetch(url, {
         method: 'POST',
@@ -32,7 +36,7 @@ class Flashcard {
 
     static deleteFCFromDb(id){
       var xhr = new XMLHttpRequest()
-      var url = 'http://localhost:3000/cards'
+      var url = 'http://localhost:53741/api/'
 
       xhr.open('DELETE', url, true)
       xhr.setRequestHeader('Content-Type', 'application/json')
