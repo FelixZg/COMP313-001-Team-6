@@ -2,10 +2,12 @@
 <html>
 
 <head>
-  <link href="styles.css" rel="stylesheet" />
+ <link href="styles.css" rel="stylesheet" />
   <!-- Font Awesome Icon Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style>
    .checked {
     color: orange;
@@ -16,53 +18,78 @@
 <body>
   <main>
     <header>
+        
       <nav>
-        <a id="logInSwitch">Log in</a>
-        <a id="signUpSwitch">Sign up</a>
+           <div class="row">
+            <a  class="font-poppins col-6" id="logInSwitch" style="text-align: center; background-color: rgba(60,139,242,1); color: white; font-size: 1.2em;">Log in</a>
+            <a  class="font-poppins col-6" id="signUpSwitch" style="text-align: center; background-color: rgba(155,190,237,1); color: white; font-size: 1.2em">Sign up</a>
+          </div>
+     
         <div id="logIn" class="content">
           <form id="logInForm">
-            <label>Username</label>
-            <input type="text" id="logInUsername" name="username" placeholder="username" required>
-            <label>Password</label>
-            <input type="password" id="logInPassword" name="password" placeholder="Password" minlength="5" required>
-            <input type="submit" id="logInSubmitBtn" value="Log in">
+                <hr>
+            <div class="row" style="margin-top: 5px;">
+                <label class="font-poppins col-4">Username:</label>
+                <input  class="col-7 inputClass" type="text" id="logInUsername" name="username"  required>
+            </div>
+            
+              <div class="row" style="margin-top: 5px;">
+                <label  class="font-poppins col-4">Password:</label>
+                <input class="col-7 inputClass"  type="password" id="logInPassword" name="password"  minlength="5" required>
+              </div>
+            
+            <input class="btn btn-primary pt-1 pb-1" type="submit" id="logInSubmitBtn" value="Log in"  style="display: block; margin: 0 auto; margin-top: 10px">
           </form>
+              <hr>
         </div>
         <div id="signUp" class="content">
           <form id="signUpForm">
-            <label>Username</label>
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            <label>Password</label>
-            <input type="password" id="password" name="password" placeholder="Password" minlength="5" required>
-            <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="5" required>
-            <input type="submit" id="signUpSubmitBtn" value="Sign up">
+                <hr>
+             <div class="row" style="margin-top: 5px;">
+                <label  class="font-poppins col-4" for="title">Username:</label>
+                <input type="text" class="col-7 inputClass" id="username" name="username"  style="float: right;" required>
+            </div>
+              
+              <div class="row" style="margin-top: 5px;">
+                <label class="font-poppins col-4">Password:</label>
+                <input type="password" id="password" class="col-7 inputClass"  name="password" placeholder="Password" minlength="5" required>
+              </div>
+             <div class="row" style="margin-top: 5px;">
+                <label class="font-poppins col-4">Confirm:</label>
+                <input class="col-7 inputClass" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="5" required>
+              </div>
+            <input type="submit" id="signUpSubmitBtn" class="btn btn-primary pt-1 pb-1" value="Sign up" style="display: block; margin: 0 auto; margin-top: 10px" >
           </form>
+             <hr>
         </div>
-        <divclass="center-style">
+        <div class="center-style">
           <p id="username"></a>
         </div>
-        <div class="center-style">
+         <div class="center-style">
+          <button id="loadFromDbBtn"  class="btn btn-success pt-1 pb-1">Load cards from database</button>
+        </div>
+        <div class="center-style" style="margin-bottom: 5px">
           <button class="addNote" id="addNote">+</button>
         </div>
-        <div class="center-style">
-          <button id="loadFromDbBtn">Load cards from database</button>
-        </div>
+       
       </nav>
     </header>
-
-    <div id="contentToExpand" class="content">
-      <div>
-          <fieldset>
-            <legend>Flash Card</legend>
-            <label for="title">Title:</label>
-            <input type="text" id="title"><br><br>			
-            <label for="content">Content:</label><br>
-            <textarea id="content" rows="5" cols="20" placeholder="Paste content here"></textarea><br>
-            <div class="tag-container">
-              <input id="tag"/>
+   
+   <div id="contentToExpand" class="content">
+      <p class="font-poppins" id="title1">Flash Card</p>
+      <div id="gt">
+          <div id="mainContent">
+          <div class="row">
+            <label  class="font-poppins col-3" for="title">Title:</label>
+            <input type="text" class="col-8 inputClass" style="height: 22px;"><br>	
           </div>
-            <label for="priority">Priority:</label>
+           
+            <label for="content" class="font-poppins mx-0" style="margin-bottom:0px">Content:</label><br>
+            <textarea id="content" class="font-poppins col-12 inputClass" rows="4" cols="20" placeholder="Paste content here"></textarea><br>
+            <div class="tag-container" style="margin-bottom: 5px;">
+              <input id="tag" class="inputClass"/>
+          </div>
+            <label for="priority" class="font-poppins">Priority:</label>
             <span class="fa fa-star checked" id="1one"></span>
             <span class="fa fa-star checked" id="2one"></span>
             <span class="fa fa-star checked" id="3one"></span>
@@ -70,19 +97,24 @@
             <span class="fa fa-star checked" id="5one"></span>
             <br>
             <div id=reminder>
-            <label for="reminder">Reminder</label>
-            <input type="checkbox" id="checkBox" onclick="checkBoxClicked()"><br>
+              <div class="custom-control custom-checkbox">
+               
+                <input type="checkbox" class="custom-control-input inputClass" id="customCheck1" onclick="checkBoxClicked()">
+                <label class="custom-control-label" for="customCheck1">Reminder</label>
+              </div>
+           
             
-            <label for="time" >Time:</label>
-            <input type="datetime-local" id="time"><br>
-            <label id="lblRules" style="color:red"></label>          
-            <div>
-              <button id="submitBtn">Save locally</button>
-              <button id="dbSaveBtn">Save to database</button>
-              <button id="cancelBtn">Cancel</button>
+            <label for="time" class="font-poppins mb-0">Time:</label>
+            <input type="datetime-local" class="col-12 px-1 font-poppins inputClass" style="font-size: 14px;" id="time">
+            <label id="lblRules" style="color:red"></label>    
+            <div class="mt-2 mb-0">
+              <button id="submitBtn" class="btn btn-primary pt-1 pb-1" style="background: rgba(60,139,242,1);">Save Locally</button>
+            <button id="dbSaveBtn" class="btn btn-primary pt-1 pb-1"  style="background: rgba(60,139,242,1);">Save do AWS</button>
+              <button id="cancelBtn" class="btn btn-secondary pt-1 pb-1" style="margin-top: 5px">Cancel</button>
+                
             </div>
-            <br>
-          </fieldset>
+          
+          </div>
       </div>
     </div>
 

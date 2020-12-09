@@ -1,6 +1,22 @@
 /* Global styles
 --------------------------------------*/
+.font-robo {
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+}
 
+.font-poppins {
+  font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
+}
+#title1 {
+  color: #525252;
+  font-weight: 400;
+  font-size: 20px;
+  background: linear-gradient(90deg, rgba(193,224,233,1) 16%, rgba(129,162,207,1) 38%, rgba(60,139,242,1) 100%);
+
+  margin: 0px;
+  padding: 8px 10px;
+  border-radius: 5px 5px 0 0;
+}
 html {
   box-sizing: border-box;
 }
@@ -10,14 +26,14 @@ html {
 }
 
 body {
-  color: #313638ff;
+ 
   margin: 0;
   padding: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 12px;
   line-height: 1.0;
   height: 800px;
-  width: 300px;
+  width: 320px;
 }
 
 .content-wrap {
@@ -25,6 +41,9 @@ body {
   width: 85%;
   margin: 0 auto;
   padding: 60px 0 60px;
+  background-image: url(b1.png);
+  background-repeat: repeat;
+  background-size: cover;
 }
 
 /* Landing page
@@ -45,7 +64,7 @@ nav {
 
 .addNote {
   color: #f2f4f3ff;
-  background-color: #03b5aaff;
+  background: linear-gradient(90deg, rgba(193,224,233,1) 19%, rgba(155,190,237,1) 48%, rgba(60,139,242,1) 100%);
   height: 40px;
   width: 40px;
   outline: none;
@@ -83,14 +102,21 @@ nav {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: #f1f1f1;
+
+
+}
+#mainContent {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  padding: 8px 15px;
+  border-radius: 0 0 5px 5px;
+ 
 }
 
 /* Flash Card
 --------------------------------------*/
 
 .tag-container{
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   padding: 5px;
   border-radius: 3px;
   display: flex;
@@ -118,6 +144,19 @@ nav {
   outline: none;
   border: 0;
 }
+label {
+  color: #555;
+}
+
+.inputClass {
+  outline: none;
+  background: #fafafa;
+  border-radius: 5px;
+  border: none;
+  color: #666;
+  transition: all .4s ease;
+  box-shadow: inset 0 1px 3px 0 rgba(0,0,0,.08);
+}
 
 .flex-item h4 {
   margin-top: 2px;
@@ -135,8 +174,4 @@ nav {
 .yes-button{
   border: 1px solid #313638ff;
   border-radius: 10px;
-}
-
-a:hover {
-  cursor: pointer;
 }
