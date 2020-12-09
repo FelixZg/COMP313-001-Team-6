@@ -59,7 +59,7 @@ function createFlashcard(location) {
     }
     
     if (location === "db") {
-      Flashcard.addFlashCardToDb(flashcard = new Flashcard(Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, organizedTags, null, currentStarMark));
+      Flashcard.addFlashCardToDb(flashcard = new Flashcard(Math.random().toString(36).substr(2, 9).toString(), title.value, content.value, null, null, null));
     }
 
     expandCollapseAddFlashcard();

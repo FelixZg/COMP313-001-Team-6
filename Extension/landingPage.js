@@ -16,6 +16,7 @@ fourStar.addEventListener("click", function () { starmark(fourStar); });
 var fiveStar = document.getElementById("5one");
 fiveStar.addEventListener("click", function () { starmark(fiveStar); });
 
+
 let logInSwitch = document.getElementById('logInSwitch')
 let signUpSwitch = document.getElementById('signUpSwitch')
 let loadFromDbBtn = document.getElementById('loadFromDbBtn')
@@ -349,17 +350,25 @@ signUpSwitch.addEventListener("click", () => {
 })
 
 loadFromDbBtn.addEventListener('click', () => {
-  var url = 'http://localhost:3000/cards'
-
-  fetch(url)
-  .then(response => response.json())
-  .then(function(json) {
-    for (var i = 0; i < json.length; i++) {
-      var card = json[i];
-      console.log(card)      
-      displayFlashcardFromDb(card, i + 10);
-      numFlashcards++;
-    }
+  chrome.storage.local.get("username", function(item) {
+    var username = item.username
+    var url = 'http://localhost:53741/api/' + username + '/card'
+    fetch(url, {
+      method: 'GET',
+    })
+    .then((res) => {
+      return res.json()
+    })
+    .then(function(json) {
+      for (var i = 0; i < json.length; i++) {
+        var card = json[i];
+        console.log(card)      
+        displayFlashcardFromDb(card, i + 10);
+        numFlashcards++;
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   })
-  .catch(err => console.log(err))
 })

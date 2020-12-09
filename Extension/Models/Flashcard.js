@@ -1,53 +1,38 @@
 class Flashcard {
-    constructor(id, title, content, tag, date, priority){
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.tag = tag;
-        this.date = date;
-        this.priority = priority;
-        this.noCount = 0;
-    }
+  constructor(id, title, content, tag, date, priority){
+      this.id = id;
+      this.title = title;
+      this.content = content;
+      this.tag = tag;
+      this.date = date;
+      this.priority = priority;
+  }
 
-    static addFlashCardToStorage(flashcard){
-        window.localStorage.setItem(flashcard.id, JSON.stringify(flashcard));
-    }
+  static addFlashCardToStorage(flashcard){
+      window.localStorage.setItem(flashcard.id, JSON.stringify(flashcard));
+  }
 
-    static addFlashCardToDb(flashcard){
-      var username
-      chrome.storage.local.get("username", function(item) {
-        username = item.username
-      })
-      var url = 'http://localhost:53741/api/' + username
-
+  static addFlashCardToDb(flashcard){
+    chrome.storage.local.get("username", function(item) {
+      var username = item.username
+      var url = 'http://localhost:53741/api/' + username + '/card'
       fetch(url, {
         method: 'POST',
-        body: JSON.stringify(flashcard),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'}
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(flashcard)
       })
-      .then(response => response.json())
-      .then(json => console.log(json))
-      .catch(err => console.log(err))
-    }
-
-    static deleteFCFromStorage(id){
-        window.localStorage.removeItem(id);
-    }
-
-    static deleteFCFromDb(id){
-      var xhr = new XMLHttpRequest()
-      var url = 'http://localhost:53741/api/'
-
-      xhr.open('DELETE', url, true)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.send(JSON.stringify(flashcard))
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var json = JSON.parse(xhr.responseText)
-          console.log(json)
-        } else {
-          console.log("LOG")
-        }
-      }
+      .then(res => {
+        return new Promise(resolve => {
+          if (res.status !== 200) resolve('fail')
+            resolve('success')
+        })
+      })  
+    })
   }
+
+  static deleteFCFromStorage(id){
+      window.localStorage.removeItem(id);
+  } 
 }

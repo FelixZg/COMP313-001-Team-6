@@ -47,7 +47,7 @@
                 <hr>
              <div class="row" style="margin-top: 5px;">
                 <label  class="font-poppins col-4" for="title">Username:</label>
-                <input type="text" class="col-7 inputClass" id="username" name="username"  style="float: right;" required>
+                <input type="text" class="col-7 inputClass" id="username" name="username" placeholder="Username" style="float: right;" required>
             </div>
               
               <div class="row" style="margin-top: 5px;">
@@ -66,7 +66,7 @@
           <p id="username"></a>
         </div>
          <div class="center-style">
-          <button id="loadFromDbBtn"  class="btn btn-success pt-1 pb-1">Load cards from database</button>
+          <button id="loadFromDbBtn" class="btn btn-success pt-1 pb-1">Load cards from database</button>
         </div>
         <div class="center-style" style="margin-bottom: 5px">
           <button class="addNote" id="addNote">+</button>
@@ -76,46 +76,44 @@
     </header>
    
    <div id="contentToExpand" class="content">
+     <fieldset>
       <p class="font-poppins" id="title1">Flash Card</p>
       <div id="gt">
-          <div id="mainContent">
+        <div id="mainContent">
           <div class="row">
             <label  class="font-poppins col-3" for="title">Title:</label>
-            <input type="text" class="col-8 inputClass" style="height: 22px;"><br>	
+            <input type="text" id="title" class="col-8 inputClass" style="height: 22px;"><br>	
           </div>
            
-            <label for="content" class="font-poppins mx-0" style="margin-bottom:0px">Content:</label><br>
-            <textarea id="content" class="font-poppins col-12 inputClass" rows="4" cols="20" placeholder="Paste content here"></textarea><br>
-            <div class="tag-container" style="margin-bottom: 5px;">
+          <label for="content" class="font-poppins mx-0" style="margin-bottom:0px">Content:</label><br>
+          <textarea id="content" class="font-poppins col-12 inputClass" rows="4" cols="20" placeholder="Paste content here"></textarea><br>
+          <div class="tag-container" style="margin-bottom: 5px;">
               <input id="tag" class="inputClass"/>
           </div>
-            <label for="priority" class="font-poppins">Priority:</label>
-            <span class="fa fa-star checked" id="1one"></span>
-            <span class="fa fa-star checked" id="2one"></span>
-            <span class="fa fa-star checked" id="3one"></span>
-            <span class="fa fa-star checked" id="4one"></span>
-            <span class="fa fa-star checked" id="5one"></span>
-            <br>
-            <div id=reminder>
-              <div class="custom-control custom-checkbox">
-               
-                <input type="checkbox" class="custom-control-input inputClass" id="customCheck1" onclick="checkBoxClicked()">
-                <label class="custom-control-label" for="customCheck1">Reminder</label>
-              </div>
-           
-            
+          <label for="priority" class="font-poppins">Priority:</label>
+          <span class="fa fa-star checked" id="1one"></span>
+          <span class="fa fa-star checked" id="2one"></span>
+          <span class="fa fa-star checked" id="3one"></span>
+          <span class="fa fa-star checked" id="4one"></span>
+          <span class="fa fa-star checked" id="5one"></span>
+          <br>
+          <div id=reminder>
+            <div class="custom-control custom-checkbox">  
+              <input type="checkbox" class="custom-control-input inputClass" id="checkBox" onclick="checkBoxClicked()">
+              <label class="custom-control-label" for="customCheck1">Reminder</label>
+            </div>
             <label for="time" class="font-poppins mb-0">Time:</label>
             <input type="datetime-local" class="col-12 px-1 font-poppins inputClass" style="font-size: 14px;" id="time">
             <label id="lblRules" style="color:red"></label>    
             <div class="mt-2 mb-0">
               <button id="submitBtn" class="btn btn-primary pt-1 pb-1" style="background: rgba(60,139,242,1);">Save Locally</button>
-            <button id="dbSaveBtn" class="btn btn-primary pt-1 pb-1"  style="background: rgba(60,139,242,1);">Save do AWS</button>
+              <button id="dbSaveBtn" class="btn btn-primary pt-1 pb-1"  style="background: rgba(60,139,242,1);">Save do AWS</button>
               <button id="cancelBtn" class="btn btn-secondary pt-1 pb-1" style="margin-top: 5px">Cancel</button>
-                
             </div>
-          
           </div>
+        </div>
       </div>
+     </fieldset> 
     </div>
 
     <!-------------Flash Cards ---------------->

@@ -91,12 +91,18 @@ namespace UserSignup.Controllers
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
             User user = await service.GetUserAsync(username);
             var cardList = new List<Card>();
-            foreach (string id in user.Cards)
+            if (user.Cards != null)
             {
-                cardList.Add(await service.getCard(id));
+                foreach (string id in user.Cards)
+                {
+                    cardList.Add(await service.getCard(id));
+                }
+                return Ok(cardList.Where(card => card != null));
             }
-
-            return Ok(cardList.Where(card => card != null));
+            else
+            {
+                return NotFound("This user does not have any cards");
+            }   
         }
 
         [HttpGet("card/{id}")]
