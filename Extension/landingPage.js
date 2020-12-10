@@ -16,10 +16,27 @@ fourStar.addEventListener("click", function () { starmark(fourStar); });
 var fiveStar = document.getElementById("5one");
 fiveStar.addEventListener("click", function () { starmark(fiveStar); });
 
-
 let logInSwitch = document.getElementById('logInSwitch')
 let signUpSwitch = document.getElementById('signUpSwitch')
 let loadFromDbBtn = document.getElementById('loadFromDbBtn')
+let signOutBtn =  document.getElementById('signOutButton')
+
+function buttonToggler() {
+  chrome.storage.local.get("username", function(item) {
+    var username = item.username
+    if (username !== undefined) {
+      signOutBtn.parentNode.replaceChild(signOutBtn, logInSwitch);
+      signUpSwitch.hidden = true
+      loadFromDbBtn.hidden = false
+    } else {
+      signOutBtn.parentNode.replaceChild(logInSwitch, signOutBtn);
+      signUpSwitch.hidden = false
+      loadFromDbBtn.hidden = true
+    }
+  })
+}
+
+buttonToggler()
 
 // Add flashcard menu expand & collapse
 button.addEventListener("click", expandCollapseAddFlashcard);
@@ -130,19 +147,20 @@ function displayFlashcard(flashcardData, i) {
 
   //create button event listeners
   deletebutton.addEventListener("click", expandCollapseDeleteFlashcard.bind(this, i), false);
-  deleteYesBtn.addEventListener("click", deleteFC.bind(this, flashcardData.id), true);
+  deleteYesBtn.addEventListener("click", deleteFC.bind(this, flashcardData.id, "local"), true);
   deleteNoBtn.addEventListener("click", expandCollapseDeleteFlashcard.bind(this, i), false);
   document.getElementById(updatebutton.id).addEventListener("click", updateFC.bind(this, flashcardData.id), true);
 
   checkForNoFlashcards();
 }
 
-function displayFlashcardFromDb(flashcardData, i) {
-  var id = parseInt(flashcardData.id)
-  console.log(id)
-  container = document.createElement("SECTION");
-  container.setAttribute('class', 'flashCardItem flex-item');
-  container.setAttribute('Id', id);
+function displayFlashcardFromDb(flashcardData) {
+  var randNum = Math.floor(Math.random() * 10000) + 1
+  var containerId = randNum.toString()
+  var cardId = flashcardData.id
+  container = document.createElement("DBSECTION");
+  container.setAttribute('class', 'flashCardItem flex-item dbcard');
+  container.setAttribute('Id', containerId);
 
   //create header element
   title = document.createElement("H4");
@@ -151,8 +169,8 @@ function displayFlashcardFromDb(flashcardData, i) {
   p = document.createElement("P");
   
   //create button elements
-  updatebutton = document.createElement("BUTTON");
-  deletebutton = document.createElement("BUTTON");
+  updatebutton = document.createElement("button");
+  deletebutton = document.createElement("button");
 
   //assign inner html values
   title.innerHTML = flashcardData.title;
@@ -160,21 +178,47 @@ function displayFlashcardFromDb(flashcardData, i) {
   updatebutton.innerHTML = "Edit";
   deletebutton.innerHTML = "Delete";
 
+  //set attributes to buttons based on flashcard id
+  updatebutton.setAttribute("id", cardId);
+  deletebutton.setAttribute("id", cardId + 'a');
+
+  // elements for delete UI
+  expandableDeleteContent = document.createElement("DIV");
+  expandableDeleteContent.id = containerId + "expandable";
+  expandableDeleteContent.classList.add("content");
+  labelDelete = document.createElement("label");
+  labelDelete.innerHTML = "Are you sure you want to delete?";
+  expandableDeleteContent.appendChild(labelDelete);
+  deleteYesBtn = document.createElement("BUTTON");
+  deleteYesBtn.innerHTML = "Yes";
+  deleteYesBtn.setAttribute("id", cardId + 'a');
+  expandableDeleteContent.appendChild(deleteYesBtn);
+  deleteNoBtn = document.createElement("BUTTON");
+  deleteNoBtn.innerHTML = "No";
+  deleteNoBtn.setAttribute("id", cardId + 'a');
+  expandableDeleteContent.appendChild(deleteNoBtn);
+
   //append child elements
   document.getElementById("democontainer").appendChild(container);
-  document.getElementById(id).appendChild(title);
-  document.getElementById(id).appendChild(p);
-  document.getElementById(id).appendChild(document.createElement("br"));
-  document.getElementById(id).appendChild(document.createElement("br"));
-  
-  checkForNoFlashcards();
+  document.getElementById(containerId).appendChild(title);
+  document.getElementById(containerId).appendChild(p);
+  document.getElementById(containerId).appendChild(document.createElement("br"));
+  document.getElementById(containerId).appendChild(document.createElement("br"));
+  document.getElementById(containerId).appendChild(updatebutton);
+  document.getElementById(containerId).appendChild(deletebutton);
+  document.getElementById(containerId).appendChild(expandableDeleteContent);
+
+  deletebutton.addEventListener("click", expandCollapseDeleteFlashcard.bind(this, containerId), false);
+  deleteYesBtn.addEventListener("click", deleteFC.bind(this, cardId, "db"), true);
+  deleteNoBtn.addEventListener("click", expandCollapseDeleteFlashcard.bind(this, containerId), false);
+  document.getElementById(updatebutton.id).addEventListener("click", updateFC.bind(this, cardId, flashcardData), true);
 }
 
-function updateFC(id) {
+function updateFC(id, cardData) {
   //prompts for editing new card properties
   newtitle = prompt("Please enter new title", "");
   newcontent = prompt("Please enter new content", "");
-
+  if (cardData === undefined) {
   //gets targeted flash card from storage
   newflashcard = JSON.parse(window.localStorage.getItem(id));
 
@@ -186,12 +230,32 @@ function updateFC(id) {
   //adds flash card back to storage
   Flashcard.addFlashCardToStorage(newflashcard);
   location.reload();
+  }
+  else {
+    //gets targeted flash card from database
+    editedCard = cardData;
+
+    //assigns new values
+    editedCard.id = id;
+    editedCard.title = newtitle;
+    editedCard.content = newcontent;
+
+    //adds flash card back to database
+    Flashcard.editCardInDb(editedCard);
+  }
 }
 
-function deleteFC(id) {
-  Flashcard.deleteFCFromStorage(id);
-  numFlashcards--;
-  location.reload();
+function deleteFC(id, target) {
+  if (target == "local") {
+    Flashcard.deleteFCFromStorage(id);
+    numFlashcards--;
+    location.reload();
+  } 
+  else if (target == "db")
+  {
+    Flashcard.deleteCardInDb(id);
+    numFlashcards--;
+  }
 }
 
 function expandCollapseDeleteFlashcard(id) {
@@ -349,10 +413,19 @@ signUpSwitch.addEventListener("click", () => {
   }
 })
 
-loadFromDbBtn.addEventListener('click', () => {
+signOutBtn.addEventListener("click", () => {
+  chrome.runtime.sendMessage( {message: 'logout'}, function (response) {
+    if (response.status === "success") alert("Signed out successfully")
+    location.reload()
+  })
+})
+
+loadFromDbBtn.addEventListener('click', function loadCards() {
+  const elements = document.querySelectorAll(".dbcard")
+  elements.forEach(element => element.parentNode.removeChild(element))
   chrome.storage.local.get("username", function(item) {
     var username = item.username
-    var url = 'http://localhost:53741/api/' + username + '/card'
+    var url = 'http://usersignup-test.us-west-2.elasticbeanstalk.com/api/' + username + '/card'
     fetch(url, {
       method: 'GET',
     })
@@ -363,7 +436,7 @@ loadFromDbBtn.addEventListener('click', () => {
       for (var i = 0; i < json.length; i++) {
         var card = json[i];
         console.log(card)      
-        displayFlashcardFromDb(card, i + 10);
+        displayFlashcardFromDb(card);
         numFlashcards++;
       }
     })

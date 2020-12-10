@@ -1,6 +1,6 @@
 {
-  "name": "MemorizingChrome",
-  "version": "0.1",
+  "name": "MemorizationHelper",
+  "version": "2.0",
   "description": "An extension that will help you remember stuff",
   "permissions": ["tabs", "activeTab", "storage", "<all_urls>"],
   "browser_action": {

@@ -6,7 +6,11 @@ document.querySelector('#logInForm').addEventListener('submit', e => {
 
   if (username && password) {
     chrome.runtime.sendMessage( {message: 'login', payload: {username, password}}, function (response) {
-      if (response === 'success') console.log('message sent successfully')
+      if (response === 'success') 
+      {
+        alert("Logged in successfully")
+        location.reload()
+      }
     })
   }
 })

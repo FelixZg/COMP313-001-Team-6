@@ -1,17 +1,5 @@
-//let userSignedIn = false
-//let session = false
-
-/* function isUserSignedIn() {
-  return new Promise(resolve => {
-    chrome.storage.local.get(["userStatus", "username"], function(response) {
-      if (chrome.runtime.lastError) resolve({ userStatus: false, username: {}})
-      resolve(response.userStatus === undefined ? {userStatus: false, username: {}} : {userStatus: response.userStatus, username: response.username})
-    })
-  })
-} */
-
 function loginUser(userInfo) {
-  return fetch('http://localhost:53741/api/login', {
+  return fetch('http://usersignup-test.us-west-2.elasticbeanstalk.com/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -20,12 +8,7 @@ function loginUser(userInfo) {
     })
     .then(res => {
       return new Promise(resolve => {
-        if (res.status !== 200) {
-          alert("this should fail")
-          resolve('fail')
-        }
-        else 
-        {
+        if (res.status == 200) {
           var username = userInfo.username
           chrome.storage.local.set({ "username": username }, () => {
             if (chrome.runtime.lastError) {
@@ -35,14 +18,29 @@ function loginUser(userInfo) {
               resolve('success')
             }       
           })
-        }      
+        }
+        else if (res.status == 404)
+        {
+          alert("User does not exist")
+          resolve('fail')
+        } 
+        else if (res.status == 400) 
+        {
+          alert("The password entered was not correct")
+          resolve(fail)
+        }
+        else 
+        {
+          alert("The operation could not be completed due to an error")
+          resolve('fail')
+        }
       })  
     })
     .catch(err => console.log(err))
 }
 
 function registerUser(userInfo) {
-  return fetch('http://localhost:53741/api/register', {
+  return fetch('http://usersignup-test.us-west-2.elasticbeanstalk.com/api/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -51,14 +49,19 @@ function registerUser(userInfo) {
   })
   .then(res => {
     return new Promise(resolve => {
-      alert(JSON.stringify(userInfo))
-      if (res.status !== 200) {
-        resolve('fail')
-      }
-      else 
+      if (res.status === 200)
       {
         resolve('success')
-      }  
+      } 
+      else if (res.status === 400) {
+        alert("A user with this username already exists!")
+        resolve('fail')
+      }
+      else
+      {
+        alert("The operation could not be completed due to an error")
+        resolve('fail')
+      } 
     })  
   })
   .catch(err => console.log(err))
@@ -72,6 +75,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true
   } else if (request.message === 'register') {
     registerUser(request.payload)
+  } else if (request.message === 'logout') {
+    chrome.storage.local.clear(function() {    
+      var error = chrome.runtime.lastError;
+      if (error) {
+          console.error(error);
+      }
+   });
+   sendResponse({status: "success"})
   }
 });
-

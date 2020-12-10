@@ -82,7 +82,7 @@ namespace UserSignup.Controllers
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
             User user = await service.GetUserAsync(username);
-            return Ok(user);
+            return Ok(user.Username);
         }
 
         [HttpGet("{username}/card")]
@@ -113,7 +113,7 @@ namespace UserSignup.Controllers
             return Ok(card);
         }
 
-        [HttpPut("card/edit/{id}")]
+        [HttpPut("{username}/card/edit/{id}")]
         public async Task<ActionResult> EditCard([FromBody] Card card)
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
@@ -146,7 +146,7 @@ namespace UserSignup.Controllers
         }
 
 
-        [HttpDelete("card/delete/{id}")]
+        [HttpDelete("{username}/card/delete/{id}")]
         public void DeleteCard(string id)
         {
             DynamoDBServices service = new DynamoDBServices(dynamoDBClient);
