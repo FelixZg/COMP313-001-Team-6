@@ -42,7 +42,7 @@ class Flashcard {
   static editCardInDb(flashcard) {
     chrome.storage.local.get("username", function(item) {
       var username = item.username
-      var url = 'http://localhost:53741/api/' + username + '/card/edit/' + flashcard.id
+      var url = 'http://usersignup-test.us-west-2.elasticbeanstalk.com/api/' + username + '/card/edit/' + flashcard.id
       fetch(url, {
         method: 'PUT',
         headers: {
