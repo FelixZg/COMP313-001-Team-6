@@ -32,19 +32,3 @@ if (window.addEventListener) {
 } else if (window.attachEvent) {
     window.attachEvent("onload", main)
 }
-
-// Detect highlighted text and make a flashcard out of it
-chrome.tabs.executeScript( {
-    code: "window.getSelection().toString();"
-}, function(selection) {
-    if (selection != null && selection != "") {
-        var title = "New flashcard";
-        var alarmTime = new Date();
-        //adds new flash card object to storage and assigns random id
-        Flashcard.addFlashCardToStorage(flashcard = new Flashcard('_' + Math.random().toString(36).substr(2, 9).toString(), title, selection, alarmTime.getTime()));
-        numFlashcards++;
-        displayFlashcard(flashcard, numFlashcards);
-        latestSelectionGrab = selection;
-    }
-    chrome.tabs.executeScript({code: "window.getSelection().removeAllRanges();"});
-});

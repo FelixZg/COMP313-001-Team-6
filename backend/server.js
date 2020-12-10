@@ -65,15 +65,20 @@ app.post('/signup', [
   }
 })
 
-app.post('/login', passport.authenticate('local', (error, user, info) => {
-  if (error) {
-    console.log(error)
-  } else if (user) {
-    console.log(user)
-  } else {
-    console.log(info)
-  }
-}))
+app.post('/login', (req, res) => {
+  passport.authenticate('local', (error, user, info,) => {
+    if (error) {
+      console.log(error)
+      res.sendStatus(500)
+    } else if (user) {
+      console.log(user)
+      res.sendStatus(200)
+    } else {
+      console.log(info)
+      res.sendStatus(500)
+    }
+  })(req, res)
+})
 
 app.get('/cards', (req, res) => {
   pool.query(

@@ -1,49 +1,92 @@
 class Flashcard {
-    constructor(id, title, content, tag, date, priority){
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.tag = tag;
-        this.date = date;
-        this.priority = priority;
-        this.noCount = 0;
-    }
+  constructor(id, title, content, tag, date, priority){
+      this.id = id;
+      this.title = title;
+      this.content = content;
+      this.tag = tag;
+      this.date = date;
+      this.priority = priority;
+  }
 
-    static addFlashCardToStorage(flashcard){
-        window.localStorage.setItem(flashcard.id, JSON.stringify(flashcard));
-    }
+  static addFlashCardToStorage(flashcard){
+      window.localStorage.setItem(flashcard.id, JSON.stringify(flashcard));
+  }
 
-    static addFlashCardToDb(flashcard){
-      var url = 'http://localhost:3000/cards'
-
+  static addFlashCardToDb(flashcard){
+    chrome.storage.local.get("username", function(item) {
+      var username = item.username
+      var url = 'http://usersignup-test.us-west-2.elasticbeanstalk.com/api/' + username + '/card'
       fetch(url, {
         method: 'POST',
-        body: JSON.stringify(flashcard),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'}
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(flashcard)
       })
-      .then(response => response.json())
-      .then(json => console.log(json))
-      .catch(err => console.log(err))
-    }
+      .then(res => {
+        return new Promise(resolve => {
+          if (res.status !== 200) 
+          {
+            alert("The operation could not be completed due to an error")
+            resolve('fail')
+          }
+          else 
+          {
+            resolve('success')
+          }
+        })
+      })  
+    })
+  }
 
-    static deleteFCFromStorage(id){
-        window.localStorage.removeItem(id);
-    }
+  static editCardInDb(flashcard) {
+    chrome.storage.local.get("username", function(item) {
+      var username = item.username
+      var url = 'http://localhost:53741/api/' + username + '/card/edit/' + flashcard.id
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(flashcard)
+      })
+      .then(res => {
+        return new Promise(resolve => {
+          if (res.status !== 200) {
+            alert("The operation could not be completed due to an error")
+            resolve('fail')
+          } else {
+            alert("Edit complete")
+            resolve('success')
+          }            
+        })
+      })  
+    })
+  }
 
-    static deleteFCFromDb(id){
-      var xhr = new XMLHttpRequest()
-      var url = 'http://localhost:3000/cards'
+  static deleteFCFromStorage(id){
+      window.localStorage.removeItem(id);
+  }
 
-      xhr.open('DELETE', url, true)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.send(JSON.stringify(flashcard))
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var json = JSON.parse(xhr.responseText)
-          console.log(json)
-        } else {
-          console.log("LOG")
-        }
-      }
+  static deleteCardInDb(id) {
+    chrome.storage.local.get("username", function(item) {
+      var username = item.username
+      var url = 'http://usersignup-test.us-west-2.elasticbeanstalk.com/api/' + username + '/card/delete/' + id
+      fetch(url, {
+        method: 'DELETE'
+      })
+      .then(res => {
+        return new Promise(resolve => {
+          if (res.status !== 200) {
+            alert("The operation could not be completed due to an error")
+            resolve('fail')
+          } else {
+          alert("Card successfully deleted")
+          resolve('success')
+          location.reload()
+          }          
+        })
+      })  
+    })
   }
 }
